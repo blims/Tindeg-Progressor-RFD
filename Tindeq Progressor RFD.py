@@ -313,7 +313,6 @@ def main(async_loop):
             index_p1 = index_p1 +1
             p2 = (rfdData.iloc[index_p1]['offset_time'], rfdData.iloc[index_p1]['weight'])
 
-            #slope = ((p2[1] - p1[1]) / (p2[0] - p1[0]))
             slope = get_slope(p1, p2)
 
             dt = rfd_time - p1[0]
@@ -323,8 +322,8 @@ def main(async_loop):
             rfd_slope = get_slope((0,onset), (rfd_time, y_int)) *1000
             #plot the result
             plt.subplot(2, 2, sub_plot_number)
-
-            plt.plot((0, rfd_time), (onset, y_int),'r-', label=title + '  ' + str(rfd_slope)[:5] + ' N/s', zorder=1)
+            plt.plot([], [], ' ', label="Max: "+ str(maks) +" kg")
+            plt.plot((0, rfd_time), (onset, y_int),'r-', label=title + '  ' + str(rfd_slope)[:5] + ' kg/s', zorder=1)
             plt.plot((rfd_time, rfd_time), (onset, maks),'k--')
             base_plot(title)
 
@@ -356,9 +355,9 @@ def main(async_loop):
             rfd_slope = get_slope((0,onset), (x_int, y_value)) *1000
 
             plt.subplot(2, 2, sub_plot_number)
-
+            plt.plot([], [], ' ', label="Max: "+ str(maks) +" kg")
             plt.plot((0, rfdData["offset_time"].iloc[-1]), (y_value, y_value),'k--')
-            plt.plot((0, x_int), (onset, y_value),'r-', label=title + ' ' + str(rfd_slope)[:5]  + ' N/s', zorder=1)
+            plt.plot((0, x_int), (onset, y_value),'r-', label=title + ' ' + str(rfd_slope)[:5]  + ' kg/s', zorder=1)
             base_plot(title)
             return
 
@@ -382,14 +381,13 @@ def main(async_loop):
         #
         #     plt.subplot(2, 2, sub_plot_number)
         #
-        #     plt.plot((p1[0], p2[0]), (p1[1], p2[1]),'r-', label=title + ' ' + str(rfd_slope)[:5]  + ' N/s', zorder=1)
+        #     plt.plot((p1[0], p2[0]), (p1[1], p2[1]),'r-', label=title + ' ' + str(rfd_slope)[:5]  + ' kg/s', zorder=1)
         #     base_plot(title)
         #     return
 
 
         def rfd_20_80(lower_threshold, upper_threshold, title, sub_plot_number):
             # calculates the RFD 20%-80%
-            # This function should be rewritten, the interpolation to find the points crossing 20 and 80 thresholds should be done in a septarate function.
 
 
             # calculates the intersection point between the 80% line and the load curve
@@ -426,7 +424,8 @@ def main(async_loop):
             plt.plot((0, rfdData["offset_time"].iloc[-1]), (upper_threshold, upper_threshold),'k--') #plots a horizontal line at 80%
             plt.plot((0, rfdData["offset_time"].iloc[-1]), (lower_threshold, lower_threshold),'k--') #plots a horizontal line at 20%
 
-            plt.plot((x_int_lower, x_int_upper), (lower_threshold, upper_threshold),'r-', label=title + ' ' + str(rfd_slope)[:5]  + ' N/s', zorder=1)
+            plt.plot([], [], ' ', label="Max: "+ str(maks) +" kg")
+            plt.plot((x_int_lower, x_int_upper), (lower_threshold, upper_threshold),'r-', label=title + ' ' + str(rfd_slope)[:5]  + ' kg/s', zorder=1)
             base_plot(title)
             return
 
@@ -438,9 +437,8 @@ def main(async_loop):
             plt.plot(rfdData['offset_time'], rfdData['weight'],'go-', label='Load data', zorder=0)
             plt.xlim((-10, 400))
             plt.xlabel('Time [ms]')
-            plt.ylabel('Load [N]')
+            plt.ylabel('Load [kg]')
             plt.title(title)
-            #plt.plot([], [], ' ', label="Extra label on the legend"+" test")
             plt.legend(frameon=False, loc=4)
             plt.gcf().set_size_inches(10, 8)
             plt.tight_layout()
